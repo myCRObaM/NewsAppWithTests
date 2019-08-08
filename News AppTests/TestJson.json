@@ -1,0 +1,88 @@
+{
+    "status":"ok",
+    "source":"bbc-news",
+    "sortBy":"top",
+    "articles":[
+        {
+            "author":"BBC News",
+            "title":"Trump to visit mass shooting sites amid criticism",
+            "description":"The US president heads to Ohio and Texas with his actions and language under close scrutiny.",
+            "url":"http://www.bbc.co.uk/news/world-us-canada-49261795",
+            "urlToImage":"https://ichef.bbci.co.uk/images/ic/1024x576/p07jtrrk.jpg",
+            "publishedAt":"2019-08-07T08:39:43Z"
+        },
+        {
+            "author":"BBC News",
+            "title":"Taliban bomb Kabul amid peace talk 'progress'",
+            "description":"Dozens are injured in a car bombing just days after progress was claimed in US-Taliban talks.",
+            "url":"http://www.bbc.co.uk/news/world-asia-49263537",
+            "urlToImage":"https://ichef.bbci.co.uk/news/1024/branded_news/6B32/production/_108224472_mediaitem108224471.jpg",
+            "publishedAt":"2019-08-07T10:53:39Z"
+        },
+        {
+            "author":"BBC News",
+            "title":"Tweeting bureaucrat loses landmark Australian case",
+            "description":"A public servant was fairly sacked for anonymously criticising the government, a court rules.",
+            "url":"http://www.bbc.co.uk/news/world-australia-49259942",
+            "urlToImage":"https://ichef.bbci.co.uk/news/1024/branded_news/13C10/production/_108221908_gettyimages-629584038.jpg",
+            "publishedAt":"2019-08-07T04:04:29Z"
+        },
+        {
+            "author":"BBC News",
+            "title":"Ancient parrot half the size of humans discovered",
+            "description":"The parrot roamed New Zealand 19 million years ago, and may have been flightless and carnivorous.",
+            "url":"http://www.bbc.co.uk/news/world-asia-49262365",
+            "urlToImage":"https://ichef.bbci.co.uk/news/1024/branded_news/EA94/production/_108225006_055722633-1.jpg",
+            "publishedAt":"2019-08-07T10:22:36Z"
+        },
+        {
+            "author":"BBC News",
+            "title":"Lewinsky to co-produce Clinton impeachment film",
+            "description":"The latest series of the fact-based drama will air in the run-up to 2020's presidential election.",
+            "url":"http://www.bbc.co.uk/news/entertainment-arts-49262935",
+            "urlToImage":"https://ichef.bbci.co.uk/news/1024/branded_news/16CA8/production/_108225339_monica1_976getty.jpg",
+            "publishedAt":"2019-08-07T09:43:42Z"
+        },
+        {
+            "author":"BBC News",
+            "title":"Couple posts photos before and after beating meth addiction",
+            "description":"The before-and-after pictures have been shared 140,000 times on Facebook.",
+            "url":"http://www.bbc.co.uk/news/world-us-canada-49213727",
+            "urlToImage":"https://ichef.bbci.co.uk/news/1024/branded_news/176B0/production/_108202959_8b3eb93c-00aa-4da2-bbbe-b78bef94bdcf.jpg",
+            "publishedAt":"2019-08-06T14:05:03Z"
+        },
+        {
+            "author":"BBC News",
+            "title":"No-deal Brexit: How might it affect the EU?",
+            "description":"The BBC's Adam Fleming explains what a no-deal Brexit might mean for the 27 EU countries.",
+            "url":"http://www.bbc.co.uk/news/uk-politics-49259642",
+            "urlToImage":"https://ichef.bbci.co.uk/news/1024/branded_news/15E02/production/_108220698_p07jyf7v.jpg",
+            "publishedAt":"2019-08-07T01:13:16Z"
+        },
+        {
+            "author":"BBC News",
+            "title":"Trump sues California over tax return law",
+            "description":"The law says presidential candidates must file tax returns in order to stand in primaries.",
+            "url":"http://www.bbc.co.uk/news/world-us-canada-49257844",
+            "urlToImage":"https://ichef.bbci.co.uk/news/1024/branded_news/2CC5/production/_108216411_mediaitem108216410.jpg",
+            "publishedAt":"2019-08-06T19:39:46Z"
+        },
+        {
+            "author":"BBC News",
+            "title":"Nigerian star Tekno held for pole dance in traffic",
+            "description":"He insists he was just moving from one location to another during the filming of his music video.",
+            "url":"http://www.bbc.co.uk/news/world-africa-49262495",
+            "urlToImage":"https://ichef.bbci.co.uk/news/1024/branded_news/14AFC/production/_108223748_gettyimages-962852850.jpg",
+            "publishedAt":"2019-08-07T10:55:30Z"
+        },
+        {
+            "author":"BBC News",
+            "title":"Kashmiris express anger at loss of special status",
+            "description":"Communications in the state have been cut off, and locals tell the BBC people are shocked and angry.",
+            "url":"http://www.bbc.co.uk/news/world-asia-india-49261322",
+            "urlToImage":"https://ichef.bbci.co.uk/news/1024/branded_news/D55E/production/_108222645_gettyimages-1160098211.jpg",
+            "publishedAt":"2019-08-07T09:22:11Z"
+        }
+    ]
+}
+
