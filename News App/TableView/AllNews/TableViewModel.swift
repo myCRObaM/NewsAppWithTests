@@ -16,8 +16,10 @@ import RealmSwift
 class TableViewModel: TableViewModelProtocol {
     
     var saveTime: Int = 0
+    var detailsViewControllerSubject = PublishSubject<IndexPath>()
     var changeFavoriteStateDelegate: FavoriteDelegate?
     var spinnerSubject = PublishSubject<LoaderEnum>()
+    var buttonPressDelegate: ButtonPressDelegate?
     var selectedDetailsDelegate: DetailsNavigationDelegate?
     var getNewsSubject = PublishSubject<Bool>()
     var changeFavoriteSubject = PublishSubject<Article>()
@@ -26,9 +28,7 @@ class TableViewModel: TableViewModelProtocol {
     let realmObject = RealmManager()
     var newsloaded = [Article]()
     var dataRepository: ArticleRepository
-    var scheduler: SchedulerType
-    let disposeBag = DisposeBag()
-    
+    var scheduler: SchedulerType    
     
     func setupFavoriteState(new: [Article], realm: Results<NewsFavorite>)-> [Article] {
         var finishedArray = [Article]()
@@ -47,6 +47,7 @@ class TableViewModel: TableViewModelProtocol {
     init(dataRepository: ArticleRepository, scheduler: SchedulerType = ConcurrentDispatchQueueScheduler(qos: .background)) {
         self.dataRepository = dataRepository
         self.scheduler = scheduler
+        buttonPressDelegate = self
     }
     
     
@@ -118,6 +119,15 @@ class TableViewModel: TableViewModelProtocol {
         return allNewsIndexOfCell.offset
     }
     
+    func detailsViewControllerOpen(subject: PublishSubject<IndexPath>) -> Disposable {
+       return subject
+            .observeOn(MainScheduler.instance)
+            .subscribeOn(scheduler)
+            .subscribe(onNext: {[unowned self]selected in
+                self.selectedDetailsDelegate?.openDetailsView(news: self.newsloaded[selected.row])
+            })
+    }
+    
 }
 
 protocol TableViewModelProtocol {
@@ -127,7 +137,12 @@ protocol TableViewModelProtocol {
     var requestedArticleSubject: PublishSubject<DataRequestEnum> {get set}
     var favoritesChanged: PublishSubject<[IndexPath]> {get set}
     var changeFavoriteSubject: PublishSubject<Article> {get set}
+    var detailsViewControllerSubject: PublishSubject<IndexPath> {get set}
+    var selectedDetailsDelegate: DetailsNavigationDelegate? {get set}
+    var buttonPressDelegate: ButtonPressDelegate? {get set}
     
+    
+    func detailsViewControllerOpen(subject: PublishSubject<IndexPath>) -> Disposable
     func changeFavorite(subject: PublishSubject<Article>) -> Disposable
     func getData(subject: PublishSubject<Bool>) -> Disposable
 }

@@ -32,7 +32,6 @@ class NewsTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }()
     
     private let refreshControl = UIRefreshControl()
-    var changeFavoriteStateDelegate: FavoriteDelegate?
     var vSpinner : UIView?
     let disposeBag = DisposeBag()
     let viewModel: TableViewModel!
@@ -61,6 +60,7 @@ class NewsTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func prepareForViewModel(){
         articlesDataLoaded(subject: viewModel.requestedArticleSubject)
         viewModel.changeFavorite(subject: viewModel.changeFavoriteSubject).disposed(by: disposeBag)
+        viewModel.detailsViewControllerOpen(subject: viewModel.detailsViewControllerSubject).disposed(by: disposeBag)
         viewModel.getData(subject: viewModel.getNewsSubject).disposed(by: disposeBag)
         editFavoriteRows()
     }
@@ -81,13 +81,14 @@ class NewsTableViewController: UIViewController, UITableViewDelegate, UITableVie
             fatalError("Nije instanca ")
         }
         cell.configureCell(news: singleNews)
-        cell.buttonIsPressedDelegate = viewModel
+        cell.buttonIsPressedDelegate = viewModel.buttonPressDelegate
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        viewModel.selectedDetailsDelegate?.openDetailsView(news: viewModel.newsloaded[indexPath.row])
+//        viewModel.selectedDetailsDelegate?.openDetailsView(news: viewModel.newsloaded[indexPath.row])
+        viewModel.detailsViewControllerSubject.onNext(indexPath)
     }
     
     

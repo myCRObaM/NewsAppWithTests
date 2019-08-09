@@ -551,6 +551,7 @@
 				"${PROJECT_DIR}/${PROJECT_NAME}/Delegates/FavoriteDelegate.swift",
 				"${PROJECT_DIR}/${PROJECT_NAME}/Delegates/ButtonPressDelegate.swift",
 				"${PROJECT_DIR}/${PROJECT_NAME}/Manager/RealmManager.swift",
+				"${PROJECT_DIR}/${PROJECT_NAME}/Delegates/DetailsNavigationDelegate.swift",
 			);
 			outputFileListPaths = (
 			);

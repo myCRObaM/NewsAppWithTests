@@ -1,4 +1,4 @@
-// MARK: - Mocks generated from file: News App/Delegates/ButtonPressDelegate.swift at 2019-08-08 13:35:26 +0000
+// MARK: - Mocks generated from file: News App/Delegates/ButtonPressDelegate.swift at 2019-08-09 08:47:46 +0000
 
 //
 //  ButtonPressDelegate.swift
@@ -104,7 +104,114 @@ import UIKit
 }
 
 
-// MARK: - Mocks generated from file: News App/Delegates/FavoriteDelegate.swift at 2019-08-08 13:35:26 +0000
+// MARK: - Mocks generated from file: News App/Delegates/DetailsNavigationDelegate.swift at 2019-08-09 08:47:46 +0000
+
+//
+//  DetailsNavigationDelegate.swift
+//  News App
+//
+//  Created by Matej Hetzel on 01/08/2019.
+//  Copyright © 2019 Matej Hetzel. All rights reserved.
+//
+
+import Cuckoo
+@testable import News_App
+
+import Foundation
+import UIKit
+
+
+ class MockDetailsNavigationDelegate: DetailsNavigationDelegate, Cuckoo.ProtocolMock {
+    
+     typealias MocksType = DetailsNavigationDelegate
+    
+     typealias Stubbing = __StubbingProxy_DetailsNavigationDelegate
+     typealias Verification = __VerificationProxy_DetailsNavigationDelegate
+
+     let cuckoo_manager = Cuckoo.MockManager.preconfiguredManager ?? Cuckoo.MockManager(hasParent: false)
+
+    
+    private var __defaultImplStub: DetailsNavigationDelegate?
+
+     func enableDefaultImplementation(_ stub: DetailsNavigationDelegate) {
+        __defaultImplStub = stub
+        cuckoo_manager.enableDefaultStubImplementation()
+    }
+    
+
+    
+
+    
+
+    
+    
+    
+     func openDetailsView(news: Article)  {
+        
+    return cuckoo_manager.call("openDetailsView(news: Article)",
+            parameters: (news),
+            escapingParameters: (news),
+            superclassCall:
+                
+                Cuckoo.MockManager.crashOnProtocolSuperclassCall()
+                ,
+            defaultCall: __defaultImplStub!.openDetailsView(news: news))
+        
+    }
+    
+
+	 struct __StubbingProxy_DetailsNavigationDelegate: Cuckoo.StubbingProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	
+	     init(manager: Cuckoo.MockManager) {
+	        self.cuckoo_manager = manager
+	    }
+	    
+	    
+	    func openDetailsView<M1: Cuckoo.Matchable>(news: M1) -> Cuckoo.ProtocolStubNoReturnFunction<(Article)> where M1.MatchedType == Article {
+	        let matchers: [Cuckoo.ParameterMatcher<(Article)>] = [wrap(matchable: news) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockDetailsNavigationDelegate.self, method: "openDetailsView(news: Article)", parameterMatchers: matchers))
+	    }
+	    
+	}
+
+	 struct __VerificationProxy_DetailsNavigationDelegate: Cuckoo.VerificationProxy {
+	    private let cuckoo_manager: Cuckoo.MockManager
+	    private let callMatcher: Cuckoo.CallMatcher
+	    private let sourceLocation: Cuckoo.SourceLocation
+	
+	     init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+	        self.cuckoo_manager = manager
+	        self.callMatcher = callMatcher
+	        self.sourceLocation = sourceLocation
+	    }
+	
+	    
+	
+	    
+	    @discardableResult
+	    func openDetailsView<M1: Cuckoo.Matchable>(news: M1) -> Cuckoo.__DoNotUse<(Article), Void> where M1.MatchedType == Article {
+	        let matchers: [Cuckoo.ParameterMatcher<(Article)>] = [wrap(matchable: news) { $0 }]
+	        return cuckoo_manager.verify("openDetailsView(news: Article)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	}
+}
+
+ class DetailsNavigationDelegateStub: DetailsNavigationDelegate {
+    
+
+    
+
+    
+     func openDetailsView(news: Article)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+}
+
+
+// MARK: - Mocks generated from file: News App/Delegates/FavoriteDelegate.swift at 2019-08-09 08:47:46 +0000
 
 //
 //  FavoriteDelegate.swift
@@ -210,7 +317,7 @@ import UIKit
 }
 
 
-// MARK: - Mocks generated from file: News App/Manager/ArticleRepository.swift at 2019-08-08 13:35:26 +0000
+// MARK: - Mocks generated from file: News App/Manager/ArticleRepository.swift at 2019-08-09 08:47:46 +0000
 
 //
 //  DataRepository.swift
@@ -318,7 +425,7 @@ import RxSwift
 }
 
 
-// MARK: - Mocks generated from file: News App/Manager/RealmManager.swift at 2019-08-08 13:35:26 +0000
+// MARK: - Mocks generated from file: News App/Manager/RealmManager.swift at 2019-08-09 08:47:46 +0000
 
 //
 //  RealmManager.swift
