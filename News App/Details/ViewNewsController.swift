@@ -54,7 +54,7 @@ class ViewNewsController: UIViewController {
     
 
     let disposeBag = DisposeBag()
-    var buttonIsPressedDelegate: ButtonPressDelegate?
+    var buttonIsPressedDelegate: FavoriteDelegate?
     var selectedDetailsDelegate: DetailsNavigationDelegate?
     weak var coordinator: DetailsViewCoordinator?
     var viewModel: ViewNewsModelView!
@@ -64,7 +64,6 @@ class ViewNewsController: UIViewController {
         super.viewDidLoad()
         configureStar()
         viewModel.configureStars(subject: viewModel.starInitSubject).disposed(by: disposeBag)
-        viewModel.buttonIsPressedDelegate = buttonIsPressedDelegate
         setupUI()
         setupView()
     }
@@ -108,7 +107,7 @@ class ViewNewsController: UIViewController {
     }
 
     @objc func addTapped(){
-        self.buttonIsPressedDelegate?.buttonIsPressed(new: viewModel.loadednews)
+        self.buttonIsPressedDelegate?.changeFavoriteState(news: viewModel.loadednews)
         viewModel.changeState()
         viewModel.starInitSubject.onNext(true)
     }
@@ -156,8 +155,8 @@ class ViewNewsController: UIViewController {
 
 
 
-//extension DetailsViewCoordinator: ButtonPressDelegate{
-//    func buttonIsPressed(new: Article) {
-//        changeFavoriteStateDelegate?.changeFavoriteState(news: new)
-//    }
-//}
+extension ViewNewsController: FavoriteDelegate{
+    func changeFavoriteState(news: Article) {
+        buttonIsPressedDelegate?.changeFavoriteState(news: news)
+    }
+}

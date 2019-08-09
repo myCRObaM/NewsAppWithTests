@@ -16,8 +16,6 @@ class ViewNewsModelView {
     var loadednews: Article!
     var starSubject = PublishSubject<Bool>()
     var starInitSubject = PublishSubject<Bool>()
-    var buttonIsPressedDelegate: ButtonPressDelegate?
-    var changeFavoriteStateDelegate: FavoriteDelegate?
     
     func loadDataToViewModel(news: Article){
         self.loadednews = news

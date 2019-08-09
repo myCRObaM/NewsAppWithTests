@@ -38,7 +38,6 @@
 		F0B1264022FC20C6009B93E9 /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B1263F22FC20C6009B93E9 /* GeneratedMocks.swift */; };
 		F0B1264222FC2133009B93E9 /* TableViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B1264122FC2133009B93E9 /* TableViewModelTest.swift */; };
 		F0B1264422FC3224009B93E9 /* TestJson.json in Resources */ = {isa = PBXBuildFile; fileRef = F0B1264322FC3223009B93E9 /* TestJson.json */; };
-		F0B1264622FC5012009B93E9 /* FavoritesChangeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B1264522FC5012009B93E9 /* FavoritesChangeTest.swift */; };
 		F0E4206F22DC68120010E14C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E4206E22DC68120010E14C /* AppDelegate.swift */; };
 		F0E4207122DC68120010E14C /* NewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E4207022DC68120010E14C /* NewsTableViewController.swift */; };
 		F0E4207622DC68140010E14C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0E4207522DC68140010E14C /* Assets.xcassets */; };
@@ -99,7 +98,6 @@
 		F0B1263F22FC20C6009B93E9 /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		F0B1264122FC2133009B93E9 /* TableViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewModelTest.swift; sourceTree = "<group>"; };
 		F0B1264322FC3223009B93E9 /* TestJson.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestJson.json; sourceTree = "<group>"; };
-		F0B1264522FC5012009B93E9 /* FavoritesChangeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesChangeTest.swift; sourceTree = "<group>"; };
 		F0E4206B22DC68120010E14C /* News App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "News App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0E4206E22DC68120010E14C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F0E4207022DC68120010E14C /* NewsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewController.swift; sourceTree = "<group>"; };
@@ -316,7 +314,6 @@
 				F0B1263F22FC20C6009B93E9 /* GeneratedMocks.swift */,
 				F0E4208322DC68140010E14C /* News_AppTests.swift */,
 				F0B1264122FC2133009B93E9 /* TableViewModelTest.swift */,
-				F0B1264522FC5012009B93E9 /* FavoritesChangeTest.swift */,
 				F0B1264322FC3223009B93E9 /* TestJson.json */,
 				F0E4208522DC68140010E14C /* Info.plist */,
 			);
@@ -606,7 +603,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0B1264622FC5012009B93E9 /* FavoritesChangeTest.swift in Sources */,
 				F0B1264222FC2133009B93E9 /* TableViewModelTest.swift in Sources */,
 				F0B1263E22FC1EE9009B93E9 /* News_AppTests.swift in Sources */,
 				F0B1264022FC20C6009B93E9 /* GeneratedMocks.swift in Sources */,

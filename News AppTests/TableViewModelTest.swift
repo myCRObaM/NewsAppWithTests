@@ -58,6 +58,11 @@ class TableViewModelTest: QuickSpec {
                                 expect(spinnerSubject.events[0].value.element).toEventually(equal(.addLoader))
                                 expect(spinnerSubject.events[1].value.element).toEventually(equal(.removeLoader))
                             }
+                            it("Check the functionality of delegates"){
+                                testScheduler.start()
+                               // expect(viewModel.newsloaded[0].isFavorite).toEventually(equal(true))
+                                
+                            }
                         }
                     }
     

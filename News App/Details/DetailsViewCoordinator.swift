@@ -12,13 +12,15 @@ import UIKit
 class DetailsViewCoordinator: Coordinator {
     weak var parentCoordinator: TabBarCoordinator?
     var childCoordinators: [Coordinator] = []
+    var buttonIsPressedDelegate: ButtonPressDelegate?
     var navController: UINavigationController
     var singleNews: Article
     weak var childFinishedDelegate: WorkIsDoneDelegate?
     let model = ViewNewsModelView()
     
-    init (navController: UINavigationController, news: Article, root: ChildHasFinishedDelegate){
+    init (navController: UINavigationController, news: Article, root: ChildHasFinishedDelegate, tabBarDelegate: TabBarCoordinator){
         self.navController = navController
+        self.parentCoordinator = tabBarDelegate
         singleNews = news
     }
     
@@ -26,6 +28,7 @@ class DetailsViewCoordinator: Coordinator {
     func start() {
         let ViewController = ViewNewsController(news: singleNews, model: model)
         ViewController.workIsDelegate = childFinishedDelegate
+        ViewController.buttonIsPressedDelegate = parentCoordinator
         ViewController.coordinator = self
         navController.pushViewController(ViewController, animated: true)
     }
