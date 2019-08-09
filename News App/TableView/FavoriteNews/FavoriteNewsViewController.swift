@@ -28,11 +28,20 @@ class FavoriteNewsViewController: UIViewController, UITableViewDelegate,UITableV
     }()
     
     
-    let viewModel = FavoriteViewModel()
+    let viewModel: FavoriteViewModel!
     var disposeBag = DisposeBag()
     var changeFavoriteStateDelegate: FavoriteDelegate?
-    var selectedDetailsDelegate: DetailsNavigationDelegate?
+
     
+    
+    init(viewModel: FavoriteViewModel){
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
     override func viewDidLoad() {
@@ -69,13 +78,13 @@ class FavoriteNewsViewController: UIViewController, UITableViewDelegate,UITableV
             fatalError("Nije instanca ")
         }
         
-        cell.buttonIsPressedDelegate = self
+        cell.buttonIsPressedDelegate = viewModel.buttonPressDelegate
         cell.configureCell(news: realmObjWithIndex)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        selectedDetailsDelegate?.openDetailsView(news: viewModel.news[indexPath.row])
+        viewModel.selectedDetailsDelegate?.openDetailsView(news: viewModel.news[indexPath.row])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,18 +102,12 @@ class FavoriteNewsViewController: UIViewController, UITableViewDelegate,UITableV
                     self.tableView.deleteRows(at: index, with: .automatic)
                 }
             }).disposed(by: disposeBag)
-    
 }
     
     func changeFavorite(news: Article){
         viewModel.changeFavoriteSubject.onNext(news)
     }
-    
 }
 
-extension FavoriteNewsViewController: ButtonPressDelegate{
-    func buttonIsPressed(new: Article) {
-        changeFavoriteStateDelegate?.changeFavoriteState(news: new)
-    }
-}
+
 

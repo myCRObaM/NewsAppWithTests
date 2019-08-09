@@ -97,20 +97,18 @@ class NewsTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
-        
     }
+    
     func setupView(){
         setupTableView()
         titleLabel.text = "Factory"
         self.navigationItem.titleView = titleLabel
         
         setupConstraints()
-        
     }
     
     
     func setupConstraints(){
-        
         
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true

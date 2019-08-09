@@ -11,22 +11,22 @@ import UIKit
 import RxSwift
 
 class NewsTableViewCoordinator: Coordinator {
+    
     var childCoordinators: [Coordinator] = []
     var parent: UINavigationController
     var tabBarCoordRoot: TabBarCoordinator
-    var changeFavoriteStateDelegate: FavoriteDelegate?
     
     init (navController: UINavigationController, root: TabBarCoordinator){
         self.parent = navController
         self.tabBarCoordRoot = root
+        
         let newsTableViewModel = TableViewModel(dataRepository: ArticleRepository(), scheduler: ConcurrentDispatchQueueScheduler(qos: .background))
         newsTableViewModel.selectedDetailsDelegate = self
         newsTableViewModel.changeFavoriteStateDelegate = root
-        let NewsTableView = NewsTableViewController(viewModel: newsTableViewModel)
         
+        let NewsTableView = NewsTableViewController(viewModel: newsTableViewModel)
         root.allNewsViewController = NewsTableView
     }
-    
     
     func start() {
     }

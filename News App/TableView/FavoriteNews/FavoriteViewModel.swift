@@ -21,12 +21,23 @@ class FavoriteViewModel: FavoriteViewModelProtocol {
     var brojacUcitavanja: Int = 0
     var news = [Article]()
     var loadFavoritesSubject = PublishSubject<Bool>()
+    var changeFavoriteStateDelegate: FavoriteDelegate?
+    var selectedDetailsDelegate: DetailsNavigationDelegate?
+    var buttonPressDelegate: ButtonPressDelegate?
+    var dataRepository: ArticleRepository
+    var scheduler: SchedulerType
     
     
     func fillData() {
         for index in realmObject{
             news.append(Article(title: index.title, description: index.descr, urlToImage: index.urlToImg, isFavorite: true))
         }
+    }
+    
+    init(dataRepository: ArticleRepository, scheduler: SchedulerType = ConcurrentDispatchQueueScheduler(qos: .background)) {
+        self.dataRepository = dataRepository
+        self.scheduler = scheduler
+        buttonPressDelegate = self
     }
     
     func getData() -> Disposable{
@@ -71,4 +82,9 @@ class FavoriteViewModel: FavoriteViewModelProtocol {
 protocol FavoriteViewModelProtocol {
     var favoriteChangeSubject: PublishSubject<favoriteChangeEnum> {get set}
     var news: [Article] {get set}
+}
+extension FavoriteViewModel: ButtonPressDelegate{
+    func buttonIsPressed(new: Article) {
+        changeFavoriteStateDelegate?.changeFavoriteState(news: new)
+    }
 }

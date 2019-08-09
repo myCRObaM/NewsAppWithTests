@@ -39,7 +39,6 @@ class TableViewModelTest: QuickSpec {
                     when(mock.openDetailsView(news: any())).thenDoNothing()
                     
                 }
-                
                 Cuckoo.stub(mockedFavoritesButton){ mock in
                     when(mock.buttonIsPressed(new: any())).thenDoNothing()
                 }
@@ -65,7 +64,6 @@ class TableViewModelTest: QuickSpec {
                     viewModel.getNewsSubject.onNext(true)
                     expect(viewModel.newsloaded.count).toEventually(equal(newsArray.count))
                 }
-                
                 it("Check is spinner running"){
                     testScheduler.start()
                     viewModel.getNewsSubject.onNext(true)
@@ -95,6 +93,5 @@ class TableViewModelTest: QuickSpec {
                 }
             }
         }
-        
     }
 }

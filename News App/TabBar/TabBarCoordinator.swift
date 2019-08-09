@@ -14,10 +14,12 @@ class TabBarCoordinator: Coordinator {
     
     let parent: TabBarController
     var detailsViewCoordinator: DetailsViewCoordinator?
+    
     var allNewsNavController = UINavigationController()
-    var allNewsViewController: NewsTableViewController!
     var favoriteNewsNavController = UINavigationController()
-    var favoriteNewsViewController = FavoriteNewsViewController()
+    
+    var allNewsViewController: NewsTableViewController!
+    var favoriteNewsViewController: FavoriteNewsViewController!
     
     init (controller: TabBarController){
         parent = controller
@@ -36,6 +38,7 @@ class TabBarCoordinator: Coordinator {
         
         newsTableView.start()
         favnewsTableView.start()
+        
         allNewsNavController.viewControllers = [allNewsViewController]
         favoriteNewsNavController.viewControllers = [favoriteNewsViewController]
         

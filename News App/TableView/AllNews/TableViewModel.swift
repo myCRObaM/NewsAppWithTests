@@ -115,7 +115,7 @@ class TableViewModel: TableViewModelProtocol {
     func returnIndexPathForCell(news: Article) -> Int{
         guard let allNewsIndexOfCell = newsloaded.enumerated().first(where: { (data) -> Bool
             in data.element.urlToImage == news.urlToImage
-        }) else {return -1}
+        }) else {return 0}
         return allNewsIndexOfCell.offset
     }
     

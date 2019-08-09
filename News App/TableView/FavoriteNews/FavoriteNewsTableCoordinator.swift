@@ -8,20 +8,23 @@
 
 import Foundation
 import UIKit
+import RxSwift
 
 class FavoriteNewsTableCoordinator: Coordinator {
 
     var childCoordinators: [Coordinator] = []
     var parent: UINavigationController
     var rootCoord: TabBarCoordinator
-    var changeFavoriteStateDelegate: FavoriteDelegate?
     
     init (navController: UINavigationController, root: TabBarCoordinator){
         self.parent = navController
         self.rootCoord = root
-        let favoriteNewsTableViewController = FavoriteNewsViewController()
-        favoriteNewsTableViewController.changeFavoriteStateDelegate = root
-        favoriteNewsTableViewController.selectedDetailsDelegate = self
+        
+        let favoriteViewModel = FavoriteViewModel(dataRepository: ArticleRepository(), scheduler: ConcurrentDispatchQueueScheduler(qos: .background))
+        favoriteViewModel.changeFavoriteStateDelegate = root
+        favoriteViewModel.selectedDetailsDelegate = self
+        
+        let favoriteNewsTableViewController = FavoriteNewsViewController(viewModel: favoriteViewModel)
         root.favoriteNewsViewController = favoriteNewsTableViewController
     }
     
@@ -29,7 +32,6 @@ class FavoriteNewsTableCoordinator: Coordinator {
     }
 }
 extension FavoriteNewsTableCoordinator: DetailsNavigationDelegate, ChildHasFinishedDelegate, WorkIsDoneDelegate{
-    
     func openDetailsView(news: Article) {
         let details = DetailsViewCoordinator(navController: parent, news: news, root: self, tabBarDelegate: rootCoord)
         self.addCoordinator(coordinator: details)
