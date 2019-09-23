@@ -20,7 +20,7 @@ class FavoriteNewsTableCoordinator: Coordinator {
         self.parent = navController
         self.rootCoord = root
         
-        let favoriteViewModel = FavoriteViewModel(dataRepository: ArticleRepository(), scheduler: ConcurrentDispatchQueueScheduler(qos: .background))
+        let favoriteViewModel = FavoriteViewModel(dependencies: FavoriteViewModel.Dependencies(realmManager: RealmManager(), scheduler: ConcurrentDispatchQueueScheduler(qos: .background)))
         favoriteViewModel.changeFavoriteStateDelegate = root
         favoriteViewModel.selectedDetailsDelegate = self
         

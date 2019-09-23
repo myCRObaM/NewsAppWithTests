@@ -58,10 +58,14 @@ class NewsTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     
     func prepareForViewModel(){
-        articlesDataLoaded(subject: viewModel.requestedArticleSubject)
-        viewModel.changeFavorite(subject: viewModel.changeFavoriteSubject).disposed(by: disposeBag)
-        viewModel.detailsViewControllerOpen(subject: viewModel.detailsViewControllerSubject).disposed(by: disposeBag)
-        viewModel.getData(subject: viewModel.getNewsSubject).disposed(by: disposeBag)
+        let input = TableViewModel.Input(changeFavoriteSubject: PublishSubject<Article>(), detailsViewControllerSubject: PublishSubject<IndexPath>(), getNewsSubject: PublishSubject<Bool>())
+        
+        let output = viewModel.transform(input: input)
+        
+        for disposable in output.disposables {
+            disposable.disposed(by: disposeBag)
+        }
+        articlesDataLoaded(subject: viewModel.output.requestedArticleSubject)
         editFavoriteRows()
     }
     
@@ -88,7 +92,7 @@ class NewsTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
 //        viewModel.selectedDetailsDelegate?.openDetailsView(news: viewModel.newsloaded[indexPath.row])
-        viewModel.detailsViewControllerSubject.onNext(indexPath)
+        viewModel.input.detailsViewControllerSubject.onNext(indexPath)
     }
     
     
@@ -127,7 +131,7 @@ class NewsTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func articlesDataLoaded(subject: PublishSubject<DataRequestEnum>){
         subject
             .observeOn(MainScheduler.instance)
-            .subscribeOn(viewModel.scheduler)
+            .subscribeOn(viewModel.dependencies.scheduler)
             .subscribe(onNext: {[unowned self] bool in
                 switch bool {
                 case .dataError:
@@ -147,7 +151,7 @@ class NewsTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc private func refreshApiData() {
-        viewModel.getNewsSubject.onNext(true)
+        viewModel.input.getNewsSubject.onNext(true)
     }
     
     
@@ -156,9 +160,9 @@ class NewsTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func editFavoriteRows(){
-        viewModel.favoritesChanged
+        viewModel.output.favoritesChanged
             .observeOn(MainScheduler.instance)
-            .subscribeOn(viewModel.scheduler)
+            .subscribeOn(viewModel.dependencies.scheduler)
             .subscribe(onNext: { [unowned self] index in
               self.tableView.reloadRows(at: index, with: .automatic)
             }).disposed(by: disposeBag)
@@ -189,7 +193,7 @@ class NewsTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     func loaderControl(){
-        viewModel.spinnerSubject
+        viewModel.output.spinnerSubject
             .subscribe(onNext: {[unowned self] value in
                 switch value {
                 case .addLoader:

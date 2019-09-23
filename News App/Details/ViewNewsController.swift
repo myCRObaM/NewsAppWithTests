@@ -62,11 +62,22 @@ class ViewNewsController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureStar()
-        viewModel.configureStars(subject: viewModel.starInitSubject).disposed(by: disposeBag)
+        
+        setupViewModel()
         setupUI()
         setupView()
     }
+    
+    func setupViewModel(){
+        let input = ViewNewsModelView.Input(starInitSubject: PublishSubject<Bool>())
+        let output = viewModel.transform(input: input)
+        
+        configureStar(subject: viewModel.output.starSubject).disposed(by: disposeBag)
+        for disposable in output.disposables {
+            disposable.disposed(by: disposeBag)
+        }
+    }
+    
     init(news: Article, model: ViewNewsModelView) {
         viewModel = model
         viewModel.loadDataToViewModel(news: news)
@@ -86,7 +97,7 @@ class ViewNewsController: UIViewController {
         view.addSubview(newsImageView)
         view.addSubview(newsTitleView)
         view.addSubview(newsArticleView)
-        navBarTitleLabel.text = viewModel.loadednews.title
+        navBarTitleLabel.text = viewModel.dependecies.loadedNews.title
         navigationItem.titleView = navBarTitleLabel
 
         favoriteButton.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
@@ -103,23 +114,23 @@ class ViewNewsController: UIViewController {
     
     
     func starSetup() {
-        viewModel.starInitSubject.onNext(true)
+        viewModel.input.starInitSubject.onNext(true)
     }
 
     @objc func addTapped(){
-        self.buttonIsPressedDelegate?.changeFavoriteState(news: viewModel.loadednews)
+        self.buttonIsPressedDelegate?.changeFavoriteState(news: viewModel.dependecies.loadedNews)
         viewModel.changeState()
-        viewModel.starInitSubject.onNext(true)
+        viewModel.input.starInitSubject.onNext(true)
     }
     
     
-    func configureStar(){
-        viewModel.starSubject
+    func configureStar(subject: PublishSubject<Bool>) -> Disposable{
+        return subject
             .observeOn(MainScheduler.instance)
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {[unowned self] bool in
                 self.favoriteButton.isSelected = bool
-            }).disposed(by: disposeBag)
+            })
     }
     
     func setupConstraints(){
@@ -146,9 +157,9 @@ class ViewNewsController: UIViewController {
         
     }
     func setupView(){
-        newsImageView.kf.setImage(with: URL(string: viewModel.loadednews.urlToImage))
-        newsTitleView.text = viewModel.loadednews.title
-        newsArticleView.text = viewModel.loadednews.description
+        newsImageView.kf.setImage(with: URL(string: viewModel.dependecies.loadedNews.urlToImage))
+        newsTitleView.text = viewModel.dependecies.loadedNews.title
+        newsArticleView.text = viewModel.dependecies.loadedNews.description
         
     }
 }

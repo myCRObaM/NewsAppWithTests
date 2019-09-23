@@ -31,7 +31,7 @@ class FavoriteNewsViewController: UIViewController, UITableViewDelegate,UITableV
     let viewModel: FavoriteViewModel!
     var disposeBag = DisposeBag()
     var changeFavoriteStateDelegate: FavoriteDelegate?
-
+    let changeFavorite = PublishSubject<Article>()
     
     
     init(viewModel: FavoriteViewModel){
@@ -46,10 +46,23 @@ class FavoriteNewsViewController: UIViewController, UITableViewDelegate,UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.getData().disposed(by: disposeBag)
-        viewModel.changeFavorite(subject: viewModel.changeFavoriteSubject).disposed(by: disposeBag)
-        editFavoriteRows()
+        
+        prepareViewModel()
         setupTableView()
+    }
+    
+    func prepareViewModel(){
+        let input = FavoriteViewModel.Input(getData: ReplaySubject<Bool>.create(bufferSize: 1), changeFavoriteSubject: changeFavorite)
+        let outputs = viewModel.transform(input: input)
+        
+        viewModel.input.getData.onNext(true)
+        
+        editFavoriteRows(subject: outputs.favoriteChangeSubject).disposed(by: disposeBag)
+        
+        for disposable in outputs.disposables {
+            disposable.disposed(by: disposeBag)
+        }
+        
     }
     
     
@@ -78,7 +91,7 @@ class FavoriteNewsViewController: UIViewController, UITableViewDelegate,UITableV
             fatalError("Nije instanca ")
         }
         
-        cell.buttonIsPressedDelegate = viewModel.buttonPressDelegate
+        cell.buttonIsPressedDelegate = viewModel
         cell.configureCell(news: realmObjWithIndex)
         return cell
     }
@@ -90,8 +103,8 @@ class FavoriteNewsViewController: UIViewController, UITableViewDelegate,UITableV
     override func viewWillAppear(_ animated: Bool) {
     }
     
-    func editFavoriteRows(){
-        viewModel.favoriteChangeSubject
+    func editFavoriteRows(subject: PublishSubject<favoriteChangeEnum>) -> Disposable{
+       return subject
             .observeOn(MainScheduler.instance)
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: { [unowned self] isFavorite in
@@ -101,11 +114,11 @@ class FavoriteNewsViewController: UIViewController, UITableViewDelegate,UITableV
                 case .remove(let index):
                     self.tableView.deleteRows(at: index, with: .automatic)
                 }
-            }).disposed(by: disposeBag)
+            })
 }
     
     func changeFavorite(news: Article){
-        viewModel.changeFavoriteSubject.onNext(news)
+        changeFavorite.onNext(news)
     }
 }
 

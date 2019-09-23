@@ -49,39 +49,43 @@ class TableViewModelTest: QuickSpec {
                 beforeEach {
                     testScheduler = TestScheduler(initialClock: 1)
                     viewModel = TableViewModel(dataRepository: mockArticleRepository, scheduler: testScheduler)
-                    viewModel.getData(subject: viewModel.getNewsSubject).disposed(by: disposeBag)
-                    viewModel.changeFavorite(subject: viewModel.changeFavoriteSubject).disposed(by: disposeBag)
-                    viewModel.detailsViewControllerOpen(subject: viewModel.detailsViewControllerSubject).disposed(by: disposeBag)
+                    
+                    let input = TableViewModel.Input(changeFavoriteSubject: PublishSubject<Article>(), detailsViewControllerSubject: PublishSubject<IndexPath>(), getNewsSubject: PublishSubject<Bool>())
+                    
+                    let output = viewModel.transform(input: input)
+                    for disposable in output.disposables {
+                        disposable.disposed(by: disposeBag)
+                    }
                     
                     spinnerSubject = testScheduler.createObserver(LoaderEnum.self)
                     favoritesChanged = testScheduler.createObserver([IndexPath].self)
                     
-                    viewModel.favoritesChanged.subscribe(favoritesChanged).disposed(by: disposeBag)
-                    viewModel.spinnerSubject.subscribe(spinnerSubject).disposed(by: disposeBag)
+                    viewModel.output.favoritesChanged.subscribe(favoritesChanged).disposed(by: disposeBag)
+                    viewModel.output.spinnerSubject.subscribe(spinnerSubject).disposed(by: disposeBag)
                 }
                 it("Check if its equal to the local array"){
                     testScheduler.start()
-                    viewModel.getNewsSubject.onNext(true)
+                    viewModel.input.getNewsSubject.onNext(true)
                     expect(viewModel.newsloaded.count).toEventually(equal(newsArray.count))
                 }
-                it("Check is spinner running"){
+                it("Check if spinner is running"){
                     testScheduler.start()
-                    viewModel.getNewsSubject.onNext(true)
+                    viewModel.input.getNewsSubject.onNext(true)
                     expect(spinnerSubject.events.count).toEventually(equal(2))
                     expect(spinnerSubject.events[0].value.element).toEventually(equal(.addLoader))
                     expect(spinnerSubject.events[1].value.element).toEventually(equal(.removeLoader))
                 }
-                it("Check the functionality adding favorites"){
+                it("Check the functionality of adding favorites"){
                     testScheduler.start()
                     viewModel.newsloaded = newsArray
-                    viewModel.changeFavoriteSubject.onNext(newsArray[0])
+                    viewModel.input.changeFavoriteSubject.onNext(newsArray[0])
                     expect(favoritesChanged.events.count).toEventually(equal(1))
                 }
-                it("Check opening DetailsViewController delegate"){
+                it("Check the functionality of opening DetailsViewController"){
                     testScheduler.start()
                     viewModel.newsloaded = newsArray
                     viewModel.selectedDetailsDelegate = mockedDetailsViewControllerDelegate
-                    viewModel.detailsViewControllerSubject.onNext(IndexPath(item: 0, section: 0))
+                    viewModel.input.detailsViewControllerSubject.onNext(IndexPath(item: 0, section: 0))
                     verify(mockedDetailsViewControllerDelegate).openDetailsView(news: any())
                 }
                 it("Check button Press delegate"){

@@ -15,20 +15,43 @@ import RealmSwift
 
 class TableViewModel: TableViewModelProtocol {
     
+    
+    struct Input {
+        let changeFavoriteSubject: PublishSubject<Article>
+        let detailsViewControllerSubject: PublishSubject<IndexPath>
+        let getNewsSubject: PublishSubject<Bool>
+    }
+    
+    struct Output {
+        let requestedArticleSubject: PublishSubject<DataRequestEnum>
+        let disposables: [Disposable]
+        let favoritesChanged = PublishSubject<[IndexPath]>()
+        let spinnerSubject: PublishSubject<LoaderEnum>
+    }
+    
+    struct Dependencies {
+        var dataRepository: ArticleRepository
+        var realmManager: RealmManager
+        var scheduler: SchedulerType
+    }
+    
+    
+    
+    internal let dependencies: TableViewModel.Dependencies
+    internal var input: TableViewModel.Input!
+    internal var output: TableViewModel.Output!
+    
+    
     var saveTime: Int = 0
-    var detailsViewControllerSubject = PublishSubject<IndexPath>()
+
     var changeFavoriteStateDelegate: FavoriteDelegate?
-    var spinnerSubject = PublishSubject<LoaderEnum>()
+    
     var buttonPressDelegate: ButtonPressDelegate?
     var selectedDetailsDelegate: DetailsNavigationDelegate?
-    var getNewsSubject = PublishSubject<Bool>()
     var changeFavoriteSubject = PublishSubject<Article>()
-    var favoritesChanged = PublishSubject<[IndexPath]>()
-    var requestedArticleSubject = PublishSubject<DataRequestEnum>()
-    let realmObject = RealmManager()
+    
     var newsloaded = [Article]()
-    var dataRepository: ArticleRepository
-    var scheduler: SchedulerType    
+    
     
     func setupFavoriteState(new: [Article], realm: Results<NewsFavorite>)-> [Article] {
         var finishedArray = [Article]()
@@ -44,25 +67,37 @@ class TableViewModel: TableViewModelProtocol {
         return finishedArray
     }
     
-    init(dataRepository: ArticleRepository, scheduler: SchedulerType = ConcurrentDispatchQueueScheduler(qos: .background)) {
-        self.dataRepository = dataRepository
-        self.scheduler = scheduler
+    init(dependencies: TableViewModel.Dependencies) {
+        self.dependencies = dependencies
         buttonPressDelegate = self
+    }
+    
+    func transform(input: TableViewModel.Input) -> TableViewModel.Output {
+        var disposables = [Disposable]()
+        self.input = input
+        
+        disposables.append(changeFavorite(subject: input.changeFavoriteSubject))
+        disposables.append(detailsViewControllerOpen(subject: input.detailsViewControllerSubject))
+        disposables.append(getData(subject: input.getNewsSubject))
+        
+        self.output = Output(requestedArticleSubject: PublishSubject(), disposables: disposables, spinnerSubject: PublishSubject())
+        
+        return output
     }
     
     
     func getData(subject: PublishSubject<Bool>) -> Disposable{
         let articleRepository = ArticleRepository()
         return subject.flatMap({[unowned self] (bool) -> Observable<(Results<NewsFavorite>, [Article])> in
-            self.spinnerSubject.onNext(.addLoader)
-            let observable = Observable.zip(self.realmObject.loadRealmData(), articleRepository.alamofireRequest()) { (favorites, news) in
+            self.output.spinnerSubject.onNext(.addLoader)
+            let observable = Observable.zip(self.dependencies.realmManager.loadRealmData(), articleRepository.alamofireRequest()) { (favorites, news) in
                 return (favorites, news)
             }
             return observable
         })
             
             .observeOn(MainScheduler.instance)
-            .subscribeOn(scheduler)
+            .subscribeOn(dependencies.scheduler)
             .map({[unowned self] (article, realm) -> ([Article]) in
                 let allNewsWithFavorites = self.setupFavoriteState(new: realm, realm: article)
                 return allNewsWithFavorites
@@ -71,10 +106,10 @@ class TableViewModel: TableViewModelProtocol {
                 self.newsloaded = article
                 let date = Date()
                 self.saveTime = Int(date.timeIntervalSince1970)
-                self.spinnerSubject.onNext(.removeLoader)
-                self.requestedArticleSubject.onNext(.dataLoaded)
+                self.output.spinnerSubject.onNext(.removeLoader)
+                self.output.requestedArticleSubject.onNext(.dataLoaded)
             }, onError: { [unowned self] error in
-                self.requestedArticleSubject.onNext(.dataError)
+                self.output.requestedArticleSubject.onNext(.dataError)
                 print(error)
             })
     }
@@ -82,7 +117,7 @@ class TableViewModel: TableViewModelProtocol {
     func checkRefreshTime(){
         let date = Date()
         if saveTime + 300 < Int(date.timeIntervalSince1970) || saveTime == 0 || newsloaded.isEmpty{
-            getNewsSubject.onNext(true)
+            input.getNewsSubject.onNext(true)
         }
         
     }
@@ -91,20 +126,20 @@ class TableViewModel: TableViewModelProtocol {
     func changeFavorite(subject: PublishSubject<Article>) -> Disposable{
         return subject
             .observeOn(MainScheduler.instance)
-            .subscribeOn(scheduler)
+            .subscribeOn(dependencies.scheduler)
             .map({[unowned self] newss -> (Int, IndexPath) in
                 if newss.isFavorite ?? false {
                     let index = self.returnIndexPathForCell(news: newss)
                     self.newsloaded[index].isFavorite = false
                     let newIndexOfCell: IndexPath = IndexPath(row: index, section: 0)
-                    self.realmObject.deleteObject(usedNew: newss, index: newIndexOfCell)
-                    self.favoritesChanged.onNext([newIndexOfCell])
+                    self.dependencies.realmManager.deleteObject(usedNew: newss, index: newIndexOfCell)
+                    self.output.favoritesChanged.onNext([newIndexOfCell])
                     return (index, newIndexOfCell)
                 } else {
                     let newsIndex = self.returnIndexPathForCell(news: newss)
                     let newIndexPath: IndexPath = IndexPath(row: newsIndex, section: 0)
                     self.newsloaded[newsIndex].isFavorite = true
-                    self.favoritesChanged.onNext([newIndexPath])
+                    self.output.favoritesChanged.onNext([newIndexPath])
                     return (newsIndex, newIndexPath)
                 }
             })
@@ -122,7 +157,7 @@ class TableViewModel: TableViewModelProtocol {
     func detailsViewControllerOpen(subject: PublishSubject<IndexPath>) -> Disposable {
        return subject
             .observeOn(MainScheduler.instance)
-            .subscribeOn(scheduler)
+            .subscribeOn(dependencies.scheduler)
             .subscribe(onNext: {[unowned self]selected in
                 self.selectedDetailsDelegate?.openDetailsView(news: self.newsloaded[selected.row])
             })
@@ -132,22 +167,21 @@ class TableViewModel: TableViewModelProtocol {
 
 protocol TableViewModelProtocol {
     var newsloaded: [Article] {get set}
-    var spinnerSubject: PublishSubject<LoaderEnum> {get set}
-    var getNewsSubject: PublishSubject<Bool> {get set}
-    var requestedArticleSubject: PublishSubject<DataRequestEnum> {get set}
-    var favoritesChanged: PublishSubject<[IndexPath]> {get set}
-    var changeFavoriteSubject: PublishSubject<Article> {get set}
-    var detailsViewControllerSubject: PublishSubject<IndexPath> {get set}
     var selectedDetailsDelegate: DetailsNavigationDelegate? {get set}
     var buttonPressDelegate: ButtonPressDelegate? {get set}
+    var input: TableViewModel.Input! {get set}
+    var output: TableViewModel.Output! {get set}
+    
     
     
     func detailsViewControllerOpen(subject: PublishSubject<IndexPath>) -> Disposable
     func changeFavorite(subject: PublishSubject<Article>) -> Disposable
     func getData(subject: PublishSubject<Bool>) -> Disposable
+    func transform(input: TableViewModel.Input) -> TableViewModel.Output
 }
 extension TableViewModel: ButtonPressDelegate{
     func buttonIsPressed(new: Article) {
+        self.input.changeFavoriteSubject.onNext(new)
         changeFavoriteStateDelegate?.changeFavoriteState(news: new)
     }
 }

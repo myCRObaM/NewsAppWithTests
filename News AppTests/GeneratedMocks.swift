@@ -1,4 +1,4 @@
-// MARK: - Mocks generated from file: News App/Delegates/ButtonPressDelegate.swift at 2019-08-09 08:47:46 +0000
+// MARK: - Mocks generated from file: News App/Delegates/ButtonPressDelegate.swift at 2019-09-23 10:45:40 +0000
 
 //
 //  ButtonPressDelegate.swift
@@ -104,7 +104,7 @@ import UIKit
 }
 
 
-// MARK: - Mocks generated from file: News App/Delegates/DetailsNavigationDelegate.swift at 2019-08-09 08:47:46 +0000
+// MARK: - Mocks generated from file: News App/Delegates/DetailsNavigationDelegate.swift at 2019-09-23 10:45:40 +0000
 
 //
 //  DetailsNavigationDelegate.swift
@@ -211,7 +211,7 @@ import UIKit
 }
 
 
-// MARK: - Mocks generated from file: News App/Delegates/FavoriteDelegate.swift at 2019-08-09 08:47:46 +0000
+// MARK: - Mocks generated from file: News App/Delegates/FavoriteDelegate.swift at 2019-09-23 10:45:40 +0000
 
 //
 //  FavoriteDelegate.swift
@@ -317,7 +317,7 @@ import UIKit
 }
 
 
-// MARK: - Mocks generated from file: News App/Manager/ArticleRepository.swift at 2019-08-09 08:47:46 +0000
+// MARK: - Mocks generated from file: News App/Manager/ArticleRepository.swift at 2019-09-23 10:45:40 +0000
 
 //
 //  DataRepository.swift
@@ -425,7 +425,7 @@ import RxSwift
 }
 
 
-// MARK: - Mocks generated from file: News App/Manager/RealmManager.swift at 2019-08-09 08:47:46 +0000
+// MARK: - Mocks generated from file: News App/Manager/RealmManager.swift at 2019-09-23 10:45:40 +0000
 
 //
 //  RealmManager.swift

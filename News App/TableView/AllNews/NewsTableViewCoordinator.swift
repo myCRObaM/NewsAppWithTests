@@ -20,7 +20,7 @@ class NewsTableViewCoordinator: Coordinator {
         self.parent = navController
         self.tabBarCoordRoot = root
         
-        let newsTableViewModel = TableViewModel(dataRepository: ArticleRepository(), scheduler: ConcurrentDispatchQueueScheduler(qos: .background))
+        let newsTableViewModel = TableViewModel(dependencies: TableViewModel.Dependencies(dataRepository: ArticleRepository(), realmManager: RealmManager(), scheduler: ConcurrentDispatchQueueScheduler(qos: .background)))
         newsTableViewModel.selectedDetailsDelegate = self
         newsTableViewModel.changeFavoriteStateDelegate = root
         

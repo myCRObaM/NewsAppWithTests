@@ -84,6 +84,7 @@ class NewsTableViewCell: UITableViewCell{
     
     @objc func changeFavorites(){
         buttonIsPressedDelegate?.buttonIsPressed(new: loadednewss)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -16,11 +16,12 @@ class DetailsViewCoordinator: Coordinator {
     var navController: UINavigationController
     var singleNews: Article
     weak var childFinishedDelegate: WorkIsDoneDelegate?
-    let model = ViewNewsModelView()
+    let model: ViewNewsModelView
     
     init (navController: UINavigationController, news: Article, root: ChildHasFinishedDelegate, tabBarDelegate: TabBarCoordinator){
         self.navController = navController
         self.parentCoordinator = tabBarDelegate
+        self.model = ViewNewsModelView(dependencies: ViewNewsModelView.Dependencies(loadedNews: news))
         singleNews = news
     }
     
